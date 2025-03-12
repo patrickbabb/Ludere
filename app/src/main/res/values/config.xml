@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- A unique identifier for the app (no spaces or special characters allowed) -->
-    <string name="config_id">legendofzeldaii</string>
+    <string name="config_id">finalfantasy7</string>
 
     <!-- The pretty name for the app -->
-    <string name="config_name">Legend of Zelda II</string>
+    <string name="config_name">Final Fantasy 7</string>
 
     <!-- LibRetro core to fetch for this ROM (excluding _libretro_android.so) -->
-    <string name="config_core">mgba</string>
+    <string name="config_core">pcsx_rearmed</string>
 
     <!-- Load ROM directly from memory; larger games should have this disabled -->
     <bool name="config_load_bytes">false</bool>

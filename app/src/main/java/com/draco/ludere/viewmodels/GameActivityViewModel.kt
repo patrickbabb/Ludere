@@ -11,6 +11,7 @@ import android.widget.FrameLayout
 import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
 import com.draco.ludere.R
 import com.draco.ludere.gamepad.GamePad
 import com.draco.ludere.gamepad.GamePadConfig
@@ -130,8 +131,8 @@ class GameActivityViewModel(application: Application) : AndroidViewModel(applica
         val context = getApplication<Application>().applicationContext
 
         val gamePadConfig = GamePadConfig(context, resources)
-        leftGamePad = GamePad(context, gamePadConfig.left)
-        rightGamePad = GamePad(context, gamePadConfig.right)
+        leftGamePad = GamePad(context, gamePadConfig.left, viewModelScope)
+        rightGamePad = GamePad(context, gamePadConfig.right, viewModelScope)
 
         leftGamePad?.let {
             leftContainer.addView(it.pad)

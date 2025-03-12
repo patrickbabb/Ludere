@@ -1,7 +1,6 @@
 package com.draco.ludere.gamepad
 
 import android.app.Activity
-import android.app.Service
 import android.content.Context
 import android.content.pm.PackageManager
 import android.hardware.display.DisplayManager
@@ -15,30 +14,28 @@ import com.swordfish.libretrodroid.GLRetroView
 import com.swordfish.radialgamepad.library.RadialGamePad
 import com.swordfish.radialgamepad.library.config.RadialGamePadConfig
 import com.swordfish.radialgamepad.library.event.Event
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.CoroutineScope
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 
 class GamePad(
     context: Context,
     padConfig: RadialGamePadConfig,
+    private val scope: CoroutineScope // CoroutineScope to launch coroutines
 ) {
     val pad = RadialGamePad(padConfig, 0f, context)
 
     companion object {
-        /**
-         * Should the user see the on-screen controls?
-         */
-        @Suppress("DEPRECATION")
         fun shouldShowGamePads(activity: Activity): Boolean {
-            /* Config says we shouldn't use virtual controls */
             if (!activity.resources.getBoolean(R.bool.config_gamepad))
                 return false
 
-            /* Devices without a touchscreen don't need a GamePad */
             val hasTouchScreen = activity.packageManager?.hasSystemFeature(PackageManager.FEATURE_TOUCHSCREEN)
             if (hasTouchScreen == null || hasTouchScreen == false)
                 return false
 
-            /* Fetch the current display that the game is running on */
             val currentDisplayId = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
                 activity.display!!.displayId
             else {
@@ -46,12 +43,10 @@ class GamePad(
                 wm.defaultDisplay.displayId
             }
 
-            /* Are we presenting this screen on a TV or display? */
-            val dm = activity.getSystemService(Service.DISPLAY_SERVICE) as DisplayManager
+            val dm = activity.getSystemService(Context.DISPLAY_SERVICE) as DisplayManager
             if (dm.getDisplay(currentDisplayId).flags and Display.FLAG_PRESENTATION == Display.FLAG_PRESENTATION)
                 return false
 
-            /* If a GamePad is connected, we definitely don't need touch controls */
             for (id in InputDevice.getDeviceIds()) {
                 InputDevice.getDevice(id).apply {
                     if (sources and InputDevice.SOURCE_GAMEPAD == InputDevice.SOURCE_GAMEPAD)
@@ -63,9 +58,6 @@ class GamePad(
         }
     }
 
-    /**
-     * Send inputs to the RetroView
-     */
     private fun eventHandler(event: Event, retroView: GLRetroView) {
         when (event) {
             is Event.Button -> retroView.sendKeyEvent(event.action, event.id)
@@ -77,13 +69,22 @@ class GamePad(
         }
     }
 
-    /**
-     * Register input events to the RetroView
-     */
+    // Modify the subscribe method to collect from Flow
     fun subscribe(compositeDisposable: CompositeDisposable, retroView: GLRetroView) {
-        val inputDisposable = pad.events().subscribe {
-            eventHandler(it, retroView)
+        val inputDisposable = scope.launch {
+            pad.events().collect { event ->
+                eventHandler(event, retroView)
+            }
         }
-        compositeDisposable.add(inputDisposable)
+
+        compositeDisposable.add(object : Disposable {
+            override fun dispose() {
+                inputDisposable.cancel() // Cancel the coroutine when disposing
+            }
+
+            override fun isDisposed(): Boolean {
+                return inputDisposable.isCancelled
+            }
+        })
     }
 }

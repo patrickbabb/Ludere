@@ -10,12 +10,13 @@ def configValue = { id ->
 }
 
 android {
-    compileSdkVersion 31
+    compileSdk 33
     buildToolsVersion '30.0.3'
 
     defaultConfig {
         applicationId "com.draco.ludere.${configValue('config_id')}"
         minSdkVersion 21
+        //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 31
         versionCode 1
         versionName '1.0'
@@ -101,7 +102,10 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.0'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.0'
 
-    implementation 'com.github.swordfish90:radialgamepad:0.6.0'
+//    implementation 'com.github.swordfish90:radialgamepad:0.6.0'
+//    implementation 'com.github.swordfish90:libretrodroid:0.6.2'
+
+    implementation 'com.github.swordfish90:radialgamepad:2.0.0'
     implementation 'com.github.swordfish90:libretrodroid:0.6.2'
 
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
