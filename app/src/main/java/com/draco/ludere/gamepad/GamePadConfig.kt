@@ -71,8 +71,8 @@ class GamePadConfig(
         sockets = 12,
         primaryDial = if (resources.getBoolean(R.bool.config_left_analog)) LEFT_ANALOG else LEFT_DPAD,
         secondaryDials = listOfNotNull(
-            SecondaryDialConfig.SingleButton(4, 1F, 4F, BUTTON_L1).takeIf { resources.getBoolean(R.bool.config_gamepad_l1) },
-            SecondaryDialConfig.SingleButton(10, 1F, 10F, BUTTON_SELECT).takeIf { resources.getBoolean(R.bool.config_gamepad_select) },
+            SecondaryDialConfig.SingleButton(4, 1F, 1F, BUTTON_L1).takeIf { resources.getBoolean(R.bool.config_gamepad_l1) },
+            SecondaryDialConfig.SingleButton(10, 1F, 1F, BUTTON_SELECT).takeIf { resources.getBoolean(R.bool.config_gamepad_select) },
         )
     )
 
@@ -89,8 +89,8 @@ class GamePadConfig(
             )
         ),
         secondaryDials = listOfNotNull(
-            SecondaryDialConfig.SingleButton(2, 1F, 2F, BUTTON_R1).takeIf { resources.getBoolean(R.bool.config_gamepad_r1) },
-            SecondaryDialConfig.SingleButton(8, 1F, 8F, BUTTON_START).takeIf { resources.getBoolean(R.bool.config_gamepad_start) },
+            SecondaryDialConfig.SingleButton(2, 1F, 1F, BUTTON_R1).takeIf { resources.getBoolean(R.bool.config_gamepad_r1) },
+            SecondaryDialConfig.SingleButton(8, 1F, 1F, BUTTON_START).takeIf { resources.getBoolean(R.bool.config_gamepad_start) },
         )
     )
 }
