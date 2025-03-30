@@ -16,7 +16,7 @@ class Storage(context: Context) {
 
     val storagePath: String = (context.getExternalFilesDir(null) ?: context.filesDir).path
     val cachePath: String = (context.externalCacheDir ?: context.cacheDir).path
-    val rom = File("$cachePath/rom")
+    val rom = File("$cachePath/rom.pbp") // pbp was added for PS1, might be able to be removed for other systems
     val sram = File("$storagePath/sram")
     val state = File("$storagePath/state")
     val tempState = File("$storagePath/tempstate")

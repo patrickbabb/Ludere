@@ -221,7 +221,10 @@ class GameActivityViewModel(application: Application) : AndroidViewModel(applica
             context.getString(R.string.menu_save_state),
             context.getString(R.string.menu_load_state),
             context.getString(R.string.menu_mute),
-            context.getString(R.string.menu_fast_forward)
+            context.getString(R.string.menu_fast_forward),
+            context.getString(R.string.menu_next_disk),
+            context.getString(R.string.menu_previous_disk)
+
         )
 
         override fun onClick(dialog: DialogInterface?, which: Int) {
@@ -238,6 +241,12 @@ class GameActivityViewModel(application: Application) : AndroidViewModel(applica
                 }
                 context.getString(R.string.menu_fast_forward) -> retroView?.let {
                     retroViewUtils?.fastForward(it)
+                }
+                context.getString(R.string.menu_next_disk).takeIf { retroView?.view?.getAvailableDisks()!! > 0 } -> retroView?.let {
+                    retroViewUtils?.nextDisk(it)
+                }
+                context.getString(R.string.menu_previous_disk).takeIf { retroView?.view?.getAvailableDisks()!! > 0 } -> retroView?.let {
+                    retroViewUtils?.previousDisk(it)
                 }
             }
         }
