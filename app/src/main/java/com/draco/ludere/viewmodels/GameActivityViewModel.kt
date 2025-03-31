@@ -129,10 +129,14 @@ class GameActivityViewModel(application: Application) : AndroidViewModel(applica
      */
     fun setupGamePads(leftContainer: FrameLayout, rightContainer: FrameLayout) {
         val context = getApplication<Application>().applicationContext
+// non-PSX gamepad
+//        val gamePadConfig = GamePadConfig(context, resources)
+//        leftGamePad = GamePad(context, gamePadConfig.left, viewModelScope)
+//        rightGamePad = GamePad(context, gamePadConfig.right, viewModelScope)
 
         val gamePadConfig = GamePadConfig(context, resources)
-        leftGamePad = GamePad(context, gamePadConfig.left, viewModelScope)
-        rightGamePad = GamePad(context, gamePadConfig.right, viewModelScope)
+        leftGamePad = GamePad(context, gamePadConfig.PSX_LEFT, viewModelScope)
+        rightGamePad = GamePad(context, gamePadConfig.PSX_RIGHT, viewModelScope)
 
         leftGamePad?.let {
             leftContainer.addView(it.pad)
